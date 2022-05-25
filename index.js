@@ -36,8 +36,12 @@ async function run() {
         date: booking.date,
         buyer: booking.buyer,
       };
+      const exists = await bookingCollection.findOne(query);
+      if (exists) {
+        return res.send({ success: false, booking: exists });
+      }
       const result = await bookingCollection.insertOne(booking);
-      res.send(result);
+      res.send({ success: true, result });
     });
   } finally {
   }
