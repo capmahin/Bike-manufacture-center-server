@@ -29,6 +29,28 @@ async function run() {
       res.send(services);
     });
 
+    app.get("/available", async (req, res) => {
+      const date = req.query.date || "May 11,2022";
+      const services = await serviceCollection.find().toArray();
+      const query = { date: date };
+      const bookings = await bookingCollection.find(query).toArray();
+
+      services.forEach((service) => {
+        const serviceBookings = bookings.filter(
+          (book) => book.fixing === service.name
+        );
+        const bookedMinimum_quantitys = serviceBookings.map(
+          (book) => book.minimum_quantity
+        );
+        const available = service.minimum_quantitys.filter(
+          (minimum_quantity) =>
+            !bookedMinimum_quantitys.includes(minimum_quantity)
+        );
+        service.minimum_quantitys = available;
+      });
+      res.send(services);
+    });
+
     app.post("/booking", async (req, res) => {
       const booking = req.body;
       const query = {
@@ -41,7 +63,7 @@ async function run() {
         return res.send({ success: false, booking: exists });
       }
       const result = await bookingCollection.insertOne(booking);
-      res.send({ success: true, result });
+      return res.send({ success: true, result });
     });
   } finally {
   }
