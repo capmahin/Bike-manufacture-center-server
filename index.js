@@ -38,6 +38,9 @@ async function run() {
     const serviceCollection = client.db("Assignment-12").collection("services");
     const bookingCollection = client.db("Assignment-12").collection("bookings");
     const userCollection = client.db("Assignment-12").collection("users");
+    const mechanicCollection = client
+      .db("Assignment-12")
+      .collection("mechanics");
 
     app.get("/service", async (req, res) => {
       const query = {};
@@ -64,7 +67,7 @@ async function run() {
       const requesterAccount = await userCollection.findOne({
         email: requester,
       });
-      if (requesterAccount === "admin") {
+      if (requesterAccount.role === "admin") {
         const filter = { email: email };
 
         const updateDoc = {
@@ -143,6 +146,12 @@ async function run() {
       }
       const result = await bookingCollection.insertOne(booking);
       return res.send({ success: true, result });
+    });
+
+    app.post("/mechanic", async (req, res) => {
+      const mechanic = req.body;
+      const result = await mechanicCollection.insertOne(mechanic);
+      res.send(result);
     });
   } finally {
   }
