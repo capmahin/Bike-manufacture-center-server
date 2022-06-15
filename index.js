@@ -153,9 +153,20 @@ async function run() {
       return res.send({ success: true, result });
     });
 
+    app.get("/mechanic", verifyJWT, verifyAdmin, async (req, res) => {
+      const mechanics = await mechanicCollection.find().toArray();
+      res.send(mechanics);
+    });
+
     app.post("/mechanic", verifyJWT, verifyAdmin, async (req, res) => {
       const mechanic = req.body;
       const result = await mechanicCollection.insertOne(mechanic);
+      res.send(result);
+    });
+    app.delete("/mechanic/:email", verifyJWT, verifyAdmin, async (req, res) => {
+      const email = req.params.email;
+      const filter = { email: email };
+      const result = await mechanicCollection.deleteOne(filter);
       res.send(result);
     });
   } finally {
