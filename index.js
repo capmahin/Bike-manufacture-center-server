@@ -3,6 +3,8 @@ const cors = require("cors");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
 const { MongoClient, ServerApiVersion } = require("mongodb");
+var nodemailer = require("nodemailer");
+var sgTransport = require("nodemailer-sendgrid-transport");
 const app = express();
 const port = process.env.PORT || 5000;
 
@@ -29,6 +31,32 @@ function verifyJWT(req, res, next) {
     }
     req.decoded = decoded;
     next();
+  });
+}
+
+const emailSenderOptions = {
+  auth: {
+    api_key: process.env.EMAIL_SENDER_KEY,
+  },
+};
+const emailClient = nodemailer.createTransport(sgTransport(emailSenderOptions));
+
+function sendManufactureEmail(booking) {
+  const {} = booking;
+  var email = {
+    from: "awesome@bar.com",
+    to: "mr.walrus@foo.com",
+    subject: "Hello",
+    text: "Hello world",
+    html: "<b>Hello world</b>",
+  };
+
+  emailClient.sendMail(email, function (err, info) {
+    if (err) {
+      console.log(err);
+    } else {
+      console.log("Message sent: ", info);
+    }
   });
 }
 
@@ -150,6 +178,8 @@ async function run() {
         return res.send({ success: false, booking: exists });
       }
       const result = await bookingCollection.insertOne(booking);
+      sendManufactureEmail(booking);
+
       return res.send({ success: true, result });
     });
 
