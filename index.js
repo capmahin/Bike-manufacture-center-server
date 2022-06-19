@@ -42,13 +42,23 @@ const emailSenderOptions = {
 const emailClient = nodemailer.createTransport(sgTransport(emailSenderOptions));
 
 function sendManufactureEmail(booking) {
-  const {} = booking;
+  const { buyer, buyerName, fixing, date } = booking;
   var email = {
-    from: "awesome@bar.com",
-    to: "mr.walrus@foo.com",
-    subject: "Hello",
-    text: "Hello world",
-    html: "<b>Hello world</b>",
+    from: process.env.EMAIL_SENDER,
+    to: buyer,
+    subject: `Your fixing for ${fixing} is on ${date} is confirmed`,
+    text: `Your fixing for ${fixing} is on ${date} is confirmed`,
+    html: `
+    <div>
+    <p> Hello ${buyerName}, </p>
+    <h3> Your booking For fixing ${fixing} is confirmed</h3>
+    <p>Looking forward to seeing you on ${date}</p>
+
+    
+    </div>
+    
+    
+    `,
   };
 
   emailClient.sendMail(email, function (err, info) {
@@ -178,6 +188,7 @@ async function run() {
         return res.send({ success: false, booking: exists });
       }
       const result = await bookingCollection.insertOne(booking);
+      console.log("sending email");
       sendManufactureEmail(booking);
 
       return res.send({ success: true, result });
