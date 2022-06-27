@@ -93,6 +93,9 @@ async function run() {
         res.status(403).send({ message: "forbidden" });
       }
     };
+    app.get("/piyal", (req, res) => {
+      res.send({ name: "piyal" });
+    });
 
     app.post("/create-payment-intent", verifyJWT, async (req, res) => {
       const service = req.body;
