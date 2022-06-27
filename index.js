@@ -253,16 +253,15 @@ async function run() {
       const result = await mechanicCollection.deleteOne(filter);
       res.send(result);
     });
+    app.get("/", (req, res) => {
+      res.send("Hello World!");
+    });
+
+    app.listen(port, () => {
+      console.log(`Example app listening on port ${port}`);
+    });
   } finally {
   }
 }
 
-await run();
-
-app.get("/", (req, res) => {
-  res.send("Hello World!");
-});
-
-app.listen(port, () => {
-  console.log(`Example app listening on port ${port}`);
-});
+run().catch((err) => console.error(err.message));
