@@ -256,7 +256,8 @@ async function run() {
   } finally {
   }
 }
-run().catch((err) => console.error(err.message));
+
+await run();
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
