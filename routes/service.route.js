@@ -10,4 +10,13 @@ router.post("/", (req, res) => {
   res.send("tools added");
 });
 
+router.route(
+  "/"
+    .get((req, res) => {
+      res.send("tools found with id");
+    })
+    .post((req, res) => {
+      res.send("tools added");
+    })
+);
 module.exports = router;
