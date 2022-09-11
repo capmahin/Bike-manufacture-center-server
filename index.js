@@ -10,14 +10,14 @@ const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 const app = express();
 const port = process.env.PORT || 5000;
 
-const serviceRoutes = require("./routes/service.route");
+const serviceRoutes = require("./routes/v1/service.route");
 
 app.use(cors());
 app.use(express.json());
 
 dbConnect();
 
-app.use("/service", serviceRoutes);
+app.use("/api/vi/service", serviceRoutes);
 
 // function verifyJWT(req, res, next) {
 //   const authHeader = req.headers.authorization;
@@ -203,6 +203,10 @@ run().catch((err) => console.error(err.message));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
+});
+
+app.all("*", (req, res) => {
+  res.send("No route found");
 });
 
 app.listen(port, () => {
