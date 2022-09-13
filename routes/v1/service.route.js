@@ -1,4 +1,5 @@
 const express = require("express");
+const toolsController = require("../../controllers/tools.controller");
 
 const router = express.Router();
 
@@ -28,11 +29,37 @@ const router = express.Router();
 
 router
   .route("/")
-  .get((req, res) => {
-    res.send("tools found with id");
-  })
-  .post((req, res) => {
-    res.send("tools added");
-  });
 
+  /**
+   * @api {get}/tools All tools
+   * @apiDescription Get all the tools
+   * @apiPermission admin
+   *
+   * @apiHeader {string} Authorization User's access token
+   *
+   * @apiParam {Number{1-}} [page-1] List page
+   * @apiParam {Number{1-100}} [linit-10] user per page
+   *
+   * @apiSuccess {object[]} all the tools
+   *
+   * @apiError {unauthorized 401} Unauthorized only authenticated users can access the data
+   * @apiError {Forbidden 403} Forbidden only admins can access the data
+   */
+  .get(toolsController.getAllTools)
+  /**
+   * @api {post}/tools All tools
+   * @apiDescription Get all the tools
+   * @apiPermission admin
+   *
+   * @apiHeader {string} Authorization User's access token
+   *
+   * @apiParam {Number{1-}} [page-1] List page
+   * @apiParam {Number{1-100}} [linit-10] user per page
+   *
+   * @apiSuccess {object[]} all the tools
+   *
+   * @apiError {unauthorized 401} Unauthorized only authenticated users can access the data
+   * @apiError {Forbidden 403} Forbidden only admins can access the data
+   */
+  .post(toolsController.saveATool);
 module.exports = router;
