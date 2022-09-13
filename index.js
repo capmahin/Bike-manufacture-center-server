@@ -11,9 +11,15 @@ const app = express();
 const port = process.env.PORT || 5000;
 
 const serviceRoutes = require("./routes/v1/service.route");
+const viewCount = require("./middleware/viewCount");
+const { default: rateLimit } = require("express-rate-limit");
 
 app.use(cors());
 app.use(express.json());
+
+// app.use(viewCount);
+
+// app.use(limiter);
 
 dbConnect();
 

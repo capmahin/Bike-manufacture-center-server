@@ -3,7 +3,12 @@ module.exports.getAllTools = (req, res, next) => {
   console.log(ip, query, params, body, headers);
   //   res.download(__dirname + "/tools.controller.js");
   //   res.json({ name: "abc" });
-  res.redirect("/login");
+  //   res.redirect("/login");
+  res.send("tools Found");
 };
 
 module.exports.saveATool = (req, res) => {};
+
+module.exports.getToolDetail = (req, res) => {
+  res.send("tool detail found");
+};
