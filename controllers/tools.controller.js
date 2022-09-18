@@ -1,14 +1,27 @@
+const service = [
+  { id: 1, name: "Hammer" },
+  { id: 2, name: "Hammer2" },
+  { id: 3, name: "Hammer3" },
+];
+
 module.exports.getAllTools = (req, res, next) => {
-  const { ip, query, params, body, headers } = req;
-  console.log(ip, query, params, body, headers);
-  //   res.download(__dirname + "/tools.controller.js");
-  //   res.json({ name: "abc" });
-  //   res.redirect("/login");
-  res.send("tools Found");
+  const { limit, page } = req.query;
+  console.log(limit, page);
+  res.json(service.slice(0, limit));
 };
 
-module.exports.saveATool = (req, res) => {};
+module.exports.saveATool = (req, res) => {
+  console.log(req.query);
+  service.push(req.body);
+  res.send(service);
+};
 
 module.exports.getToolDetail = (req, res) => {
-  res.send("tool detail found");
+  const { id } = req.params;
+  console.log(id);
+  // const filter = { _id: id };
+  const foundTool = service.find(
+    (services) => Number(services.id) === Number(id)
+  );
+  res.send(foundTool);
 };
