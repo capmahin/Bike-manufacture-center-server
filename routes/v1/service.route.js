@@ -66,6 +66,24 @@ router
    */
   .post(toolsController.saveATool);
 
-router.route("/:id").get(viewCount, limiter, toolsController.getToolDetail);
+router
+  .route("/:id")
+  .get(viewCount, limiter, toolsController.getToolDetail)
+  .patch(toolsController.updateTool)
+  .delete(toolsController.deleteTool);
 
 module.exports = router;
+
+let services = {
+  id: 1,
+  name: "hammer",
+};
+const newServices = { name: "test" };
+
+//put
+
+services = { name: "test" };
+
+//patch
+
+services = { id: 1, name: "test" };
