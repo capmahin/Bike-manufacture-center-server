@@ -13,6 +13,7 @@ const port = process.env.PORT || 5000;
 const serviceRoutes = require("./routes/v1/service.route");
 const viewCount = require("./middleware/viewCount");
 const { default: rateLimit } = require("express-rate-limit");
+const errorHandler = require("./middleware/errorHandler");
 
 app.use(cors());
 app.use(express.json());
@@ -214,9 +215,9 @@ app.get("/", (req, res) => {
   //
   res.render("home.ejs", {
     id: 2,
-    user:{
-      name:"test"
-    }
+    user: {
+      name: "test",
+    },
   });
 });
 
@@ -224,6 +225,15 @@ app.all("*", (req, res) => {
   res.send("No route found");
 });
 
+app.use(errorHandler);
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`);
+});
+
+process.on("unhandledRejection", (error) => {
+  console.log(error.name, error.message);
+  app.close(() => {
+    process.exit(1);
+  });
 });
