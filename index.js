@@ -16,6 +16,8 @@ const { default: rateLimit } = require("express-rate-limit");
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static("public"));
+app.set("view engine", "ejs");
 
 // app.use(viewCount);
 
@@ -208,7 +210,14 @@ async function run() {
 run().catch((err) => console.error(err.message));
 
 app.get("/", (req, res) => {
-  res.send("Hello World!");
+  // res.send("Hello World!");
+  //
+  res.render("home.ejs", {
+    id: 2,
+    user:{
+      name:"test"
+    }
+  });
 });
 
 app.all("*", (req, res) => {
